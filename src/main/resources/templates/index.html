@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to My Application</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
+</head>
+<body>
+<div class="container-fluid text-center">
+    <h1>Welcome</h1>
+    <form method="get" th:action="@{/users}">
+    <button class="btn btn-outline-dark">Manage Users</button>
+    </form>
+</div>
+</body>
+</html>

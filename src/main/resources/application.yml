@@ -1,0 +1,22 @@
+spring:
+  #App settings
+  application:
+    name: crud
+  #Hibernate settings
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+  #Datasource settings
+  datasource:
+    url: jdbc:postgresql://localhost:5433/firstDB
+    username: postgres
+    password: ${PGPASSWORD}
+
+  #Server settings
+server:
+  error:
+    include-message: always
