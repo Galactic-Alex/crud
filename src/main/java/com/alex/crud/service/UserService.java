@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,13 +63,13 @@ public class UserService implements UserDetailsService {
 
         if (!previousUser.getEmail().equalsIgnoreCase(user.getEmail())) {
             optionalUser = userRepository.findFirstByEmail(user.getEmail());
-            if (optionalUser.isPresent()){
+            if (optionalUser.isPresent()) {
                 throw new UserServiceException("User with this email already exists");
             }
         }
         if (!previousUser.getName().equals(user.getName())) {
             optionalUser = userRepository.findFirstByName(user.getName());
-            if (optionalUser.isPresent()){
+            if (optionalUser.isPresent()) {
                 throw new UserServiceException("User with this name already exists");
             }
         }

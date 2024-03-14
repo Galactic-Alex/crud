@@ -13,7 +13,8 @@ public class UserRole implements GrantedAuthority {
     @Column
     private String role;
 
-    public UserRole(){}
+    public UserRole() {
+    }
 
     public UserRole(String role) {
         this.role = role;
@@ -24,12 +25,12 @@ public class UserRole implements GrantedAuthority {
         return role;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getRole() {

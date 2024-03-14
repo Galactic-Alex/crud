@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.management.relation.Role;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -50,10 +48,6 @@ public class User implements UserDetails {
         roles.add(new UserRole("ROLE_USER"));
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Set<UserRole> getRoles() {
         return roles;
     }
@@ -69,8 +63,6 @@ public class User implements UserDetails {
     public void setId(long id) {
         this.id = id;
     }
-
-
 
     public String getName() {
         return name;
@@ -114,6 +106,10 @@ public class User implements UserDetails {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

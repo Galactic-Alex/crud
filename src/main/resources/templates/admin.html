@@ -8,15 +8,15 @@
 <body>
 <div>
     <ul class="nav nav-pills nav-fill">
-    <li class="nav-item">
-        <a th:href="@{/admin/new}">
-        <button class="btn btn-outline-dark btn-lg" >
-            Add New User
-        </button>
-        </a>
-    </li>
-    <li class="nav-item" th:insert="~{parts/logout_button.html}">
-    </li>
+        <li class="nav-item">
+            <a th:href="@{/admin/new}">
+                <button class="btn btn-outline-dark btn-lg">
+                    Add New User
+                </button>
+            </a>
+        </li>
+        <li class="nav-item" th:insert="~{parts/logout_button.html}">
+        </li>
     </ul>
 </div>
 <table class="table table-bordered">
@@ -35,9 +35,9 @@
         <td th:text="${user.roles}"></td>
         <td>
             <a class="ui-button" th:href="@{admin/edit/{id}(id=${user.id})}">
-            <button class="btn btn-outline-dark">
-                Edit
-            </button>
+                <button class="btn btn-outline-dark">
+                    Edit
+                </button>
             </a>
         </td>
         <td>
