@@ -39,12 +39,8 @@ public class UserController {
     }
 
     @PostMapping(path = "/register/new")
-    public String registerNewUserPage(User user, HttpServletResponse response) throws IOException {
-        userService.saveUser(user, response);
-
-        if (response.isCommitted()) {
-            return null;
-        }
+    public String registerNewUserPage(User user) {
+        userService.saveUser(user);
 
         return "login";
     }
@@ -57,6 +53,7 @@ public class UserController {
     @GetMapping("/logout")
     public String logoutPage(SecurityContextLogoutHandler logoutHandler, HttpServletResponse response, HttpServletRequest request, Authentication authentication) {
         logoutHandler.logout(request, response, authentication);
+
         return "redirect:login";
     }
 
@@ -68,23 +65,15 @@ public class UserController {
     }
 
     @GetMapping(path = "admin/edit/{id}")
-    public String editUserPage(@PathVariable("id") Long id, Model model, HttpServletResponse response) throws IOException {
-        model.addAttribute("user", userService.findUserById(id, response));
-
-        if (response.isCommitted()) {
-            return null;
-        }
+    public String editUserPage(@PathVariable("id") Long id, Model model) throws IOException {
+        model.addAttribute("user", userService.findUserById(id));
 
         return "users_form";
     }
 
     @PostMapping("admin/save")
-    public String saveUserPage(User user, HttpServletResponse response) throws IOException {
-        userService.saveUser(user, response);
-
-        if (response.isCommitted()) {
-            return null;
-        }
+    public String saveUserPage(User user) {
+        userService.saveUser(user);
 
         return "redirect:/admin";
     }
@@ -97,23 +86,15 @@ public class UserController {
     }
 
     @GetMapping(path = "admin/delete")
-    public String deleteUserPage(@RequestParam Long id, HttpServletResponse response) throws IOException {
-        userService.deleteById(id, response);
-
-        if (response.isCommitted()) {
-            return null;
-        }
+    public String deleteUserPage(@RequestParam Long id) throws IOException {
+        userService.deleteById(id);
 
         return "redirect:/admin";
     }
 
     @GetMapping(path = "user")
-    public String userPage(Authentication authentication, HttpServletResponse response, Model model) throws IOException {
+    public String userPage(Authentication authentication, Model model) {
         model.addAttribute("user", userService.loadUserByUsername(authentication.getName()));
-
-        if (response.isCommitted()) {
-            return null;
-        }
 
         return "user";
     }

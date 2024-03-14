@@ -24,6 +24,7 @@
         <th>Name</th>
         <th>Email</th>
         <th>Age</th>
+        <th>Roles</th>
         <th>Update</th>
         <th>Remove</th>
     </tr>
@@ -31,6 +32,7 @@
         <td th:text="${user.name}"></td>
         <td th:text="${user.email}"></td>
         <td th:text="${user.age}"></td>
+        <td th:text="${user.roles}"></td>
         <td>
             <a class="ui-button" th:href="@{admin/edit/{id}(id=${user.id})}">
             <button class="btn btn-outline-dark">

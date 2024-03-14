@@ -2,7 +2,6 @@ package com.alex.crud.service;
 
 import com.alex.crud.model.User;
 import com.alex.crud.repository.UserRepository;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +15,7 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -27,49 +26,68 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public void deleteById(Long id, HttpServletResponse response) throws IOException {
-        User user = findUserById(id, response);
+    public void deleteById(Long id) {
+        User user = findUserById(id);
         userRepository.delete(user);
     }
 
-    public User findUserById(Long id, HttpServletResponse response) throws IOException {
+    public User findUserById(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()) {
-            response.sendError(400, "User doesn't exist");
-            return null;
+            throw new UserServiceException("User doesn't exist");
         }
         return optionalUser.get();
     }
 
-    public void saveUser(User user, HttpServletResponse response) throws IOException {
-        if (!isUserValid(user, response)) {
+    public void saveUser(User user) {
+        isUserValid(user);
+
+        if (user.getId() == 0) {
+            if (!isNewUserValid(user)) {
+                return;
+            }
+        } else {
+            changeUser(user);
             return;
         }
 
-        if (user.getId() == 0) {
-            if (!isNewUserValid(user, response)) {
-                return;
+        userRepository.save(user);
+    }
+
+    public void changeUser(User user) {
+        isUserValid(user);
+        Optional<User> optionalUser = userRepository.findById(user.getId());
+        if (optionalUser.isEmpty()) {
+            throw new UserServiceException("User you were trying to change doesn't exist");
+        }
+        User previousUser = optionalUser.get();
+
+        if (!previousUser.getEmail().equalsIgnoreCase(user.getEmail())) {
+            optionalUser = userRepository.findFirstByEmail(user.getEmail());
+            if (optionalUser.isPresent()){
+                throw new UserServiceException("User with this email already exists");
+            }
+        }
+        if (!previousUser.getName().equals(user.getName())) {
+            optionalUser = userRepository.findFirstByName(user.getName());
+            if (optionalUser.isPresent()){
+                throw new UserServiceException("User with this name already exists");
             }
         }
 
         userRepository.save(user);
     }
 
-    private boolean isUserValid(User user, HttpServletResponse response) throws IOException {
+    private void isUserValid(User user) {
         if (user == null) {
-            response.sendError(400, "User is null");
-            return false;
+            throw new UserServiceException("User is null");
         }
         if (userHasNulls(user)) {
-            response.sendError(400, "Some user fields are empty");
-            return false;
+            throw new UserServiceException("Some user fields are empty");
         }
         if (user.getAge() > 130 || user.getAge() < 18) {
-            response.sendError(400, "Invalid user age");
-            return false;
+            throw new UserServiceException("Invalid user age");
         }
-
-        return true;
     }
 
     private boolean userHasNulls(User user) {
@@ -79,16 +97,14 @@ public class UserService implements UserDetailsService {
         return user.getName() == null;
     }
 
-    private boolean isNewUserValid(User user, HttpServletResponse response) throws IOException {
+    private boolean isNewUserValid(User user) {
         Optional<User> optionalUser = userRepository.findFirstByEmail(user.getEmail());
         if (optionalUser.isPresent()) {
-            response.sendError(409, "User with this email already exists");
-            return false;
+            throw new UserServiceException("User with this email already exists");
         }
         optionalUser = userRepository.findFirstByName(user.getName());
         if (optionalUser.isPresent()) {
-            response.sendError(409, "User with this name already exists");
-            return false;
+            throw new UserServiceException("User with this name already exists");
         }
         return true;
     }
