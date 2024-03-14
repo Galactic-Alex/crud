@@ -2,8 +2,11 @@ package com.alex.crud.controller;
 
 import com.alex.crud.model.User;
 import com.alex.crud.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,15 +26,49 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping(path = "/users")
-    public String users(Model model) {
-        model.addAttribute("users", userService.listAllUsers());
-
-        return "users";
+    @GetMapping(path = "/")
+    public String indexPage() {
+        return "index";
     }
 
-    @GetMapping(path = "users/edit/{id}")
-    public String editUser(@PathVariable("id") Long id, Model model, HttpServletResponse response) throws IOException {
+    @GetMapping(path = "/register")
+    public String registerFormPage(Model model) {
+        model.addAttribute("user", new User());
+
+        return "registration";
+    }
+
+    @PostMapping(path = "/register/new")
+    public String registerNewUserPage(User user, HttpServletResponse response) throws IOException {
+        userService.saveUser(user, response);
+
+        if (response.isCommitted()) {
+            return null;
+        }
+
+        return "login";
+    }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
+
+    @GetMapping("/logout")
+    public String logoutPage(SecurityContextLogoutHandler logoutHandler, HttpServletResponse response, HttpServletRequest request, Authentication authentication) {
+        logoutHandler.logout(request, response, authentication);
+        return "redirect:login";
+    }
+
+    @GetMapping(path = "/admin")
+    public String admin(Model model) {
+        model.addAttribute("users", userService.listAllUsers());
+
+        return "admin";
+    }
+
+    @GetMapping(path = "admin/edit/{id}")
+    public String editUserPage(@PathVariable("id") Long id, Model model, HttpServletResponse response) throws IOException {
         model.addAttribute("user", userService.findUserById(id, response));
 
         if (response.isCommitted()) {
@@ -41,32 +78,43 @@ public class UserController {
         return "users_form";
     }
 
-    @PostMapping("users/save")
-    public String saveUser(User user, HttpServletResponse response) throws IOException {
+    @PostMapping("admin/save")
+    public String saveUserPage(User user, HttpServletResponse response) throws IOException {
         userService.saveUser(user, response);
 
         if (response.isCommitted()) {
             return null;
         }
 
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 
-    @GetMapping("users/new")
-    public String showNewForm(Model model) {
+    @GetMapping("admin/new")
+    public String newForm(Model model) {
         model.addAttribute("user", new User());
 
         return "users_form";
     }
 
-    @GetMapping(path = "users/delete")
-    public String deleteUser(@RequestParam long id, HttpServletResponse response) throws IOException {
+    @GetMapping(path = "admin/delete")
+    public String deleteUserPage(@RequestParam Long id, HttpServletResponse response) throws IOException {
         userService.deleteById(id, response);
 
         if (response.isCommitted()) {
             return null;
         }
 
-        return "redirect:/users";
+        return "redirect:/admin";
+    }
+
+    @GetMapping(path = "user")
+    public String userPage(Authentication authentication, HttpServletResponse response, Model model) throws IOException {
+        model.addAttribute("user", userService.loadUserByUsername(authentication.getName()));
+
+        if (response.isCommitted()) {
+            return null;
+        }
+
+        return "user";
     }
 }

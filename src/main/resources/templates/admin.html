@@ -6,12 +6,18 @@
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
 </head>
 <body>
-<div class="m-2">
-    <a class="h3" th:href="@{/users/new}">
-    <button class="btn btn-outline-dark">
-        Add New User
-    </button>
-    </a>
+<div>
+    <ul class="nav nav-pills nav-fill">
+    <li class="nav-item">
+        <a th:href="@{/admin/new}">
+        <button class="btn btn-outline-dark btn-lg" >
+            Add New User
+        </button>
+        </a>
+    </li>
+    <li class="nav-item" th:insert="~{parts/logout_button.html}">
+    </li>
+    </ul>
 </div>
 <table class="table table-bordered">
     <tr>
@@ -26,14 +32,14 @@
         <td th:text="${user.email}"></td>
         <td th:text="${user.age}"></td>
         <td>
-            <a class="ui-button" th:href="@{users/edit/{id}(id=${user.id})}">
+            <a class="ui-button" th:href="@{admin/edit/{id}(id=${user.id})}">
             <button class="btn btn-outline-dark">
                 Edit
             </button>
             </a>
         </td>
         <td>
-            <form method="get" th:action="@{users/delete}">
+            <form method="get" th:action="@{admin/delete}">
                 <button class="btn btn-outline-dark" th:name="id" th:value="${user.id}" type="submit" value="delete">
                     Delete
                 </button>

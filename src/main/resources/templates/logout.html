@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome to My Application</title>
+    <title>Logout Page</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
 </head>
 <body>
-<h1>Index page</h1>
-<div th:insert="~{parts/logout_button.html}"></div>
+<h1>This is the logout page</h1>
+<a href="#" th:href="@{/logout}"><button class="btn-danger">Logout</button></a>
 </body>
 </html>

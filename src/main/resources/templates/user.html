@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
+</head>
+<body>
+<h1>Welcome to your page</h1>
+<div th:insert="~{parts/logout_button.html}"></div>
+<div th:object="${user}">
+    <table class="table table-bordered">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Age</th>
+        </tr>
+        <tr>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.age}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
