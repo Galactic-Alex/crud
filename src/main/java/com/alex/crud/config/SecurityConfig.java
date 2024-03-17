@@ -12,13 +12,11 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig{
+public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
 
@@ -48,7 +46,8 @@ public class SecurityConfig{
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/logout").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/admin/**").hasRole("ADMIN"))
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/js/**").hasAnyRole("USER", "ADMIN"))
                 .formLogin(login -> login.permitAll().successHandler(successUserHandler))
                 .logout(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable);
