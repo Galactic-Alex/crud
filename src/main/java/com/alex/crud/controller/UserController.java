@@ -8,15 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
+import java.util.List;
 
-@Controller
+@RestController
 public class UserController {
 
     private final UserService userService;
@@ -27,75 +24,81 @@ public class UserController {
     }
 
     @GetMapping(path = "/")
-    public String indexPage() {
-        return "index";
+    public ModelAndView indexPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        return modelAndView;
     }
 
-    @GetMapping(path = "/register")
-    public String registerFormPage(Model model) {
-        model.addAttribute("user", new User());
-
-        return "registration";
-    }
-
-    @PostMapping(path = "/register/new")
-    public String registerNewUserPage(User user) {
+    @PostMapping(path = "admin/saveUser")
+    public String registerNewUserPage(@ModelAttribute User user) {
         userService.saveUser(user);
 
-        return "login";
+        return "Saved";
     }
 
     @GetMapping("/login")
-    public String loginPage() {
-        return "login";
+    public ModelAndView loginPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        return modelAndView;
+    }
+
+    @GetMapping("/user")
+    public ModelAndView userIndexPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        return modelAndView;
+    }
+
+    @GetMapping("/admin")
+    public ModelAndView adminIndexPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        return modelAndView;
     }
 
     @GetMapping("/logout")
-    public String logoutPage(SecurityContextLogoutHandler logoutHandler, HttpServletResponse response, HttpServletRequest request, Authentication authentication) {
+    public ModelAndView logoutPage(SecurityContextLogoutHandler logoutHandler, HttpServletResponse response, HttpServletRequest request, Authentication authentication) {
         logoutHandler.logout(request, response, authentication);
-
-        return "redirect:login";
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        return modelAndView;
     }
 
-    @GetMapping(path = "/admin")
-    public String admin(Model model) {
-        model.addAttribute("users", userService.listAllUsers());
-
-        return "admin";
+    @GetMapping("admin/getAllUsers")
+    public List<User> getAllUsers() {
+        return userService.listAllUsers();
     }
 
-    @GetMapping(path = "admin/edit/{id}")
-    public String editUserPage(@PathVariable("id") Long id, Model model) throws IOException {
-        model.addAttribute("user", userService.findUserById(id));
-
-        return "users_form";
-    }
-
-    @PostMapping("admin/save")
-    public String saveUserPage(User user) {
-        userService.saveUser(user);
-
-        return "redirect:/admin";
-    }
-
-    @GetMapping("admin/new")
-    public String newForm(Model model) {
-        model.addAttribute("user", new User());
-
-        return "users_form";
-    }
-
-    @GetMapping(path = "admin/delete")
-    public String deleteUserPage(@RequestParam Long id) throws IOException {
+    @PostMapping("admin/deleteUser/{id}")
+    public String deleteUser(@PathVariable("id") Long id) {
+        System.out.println("this one worked");
         userService.deleteById(id);
-
-        return "redirect:/admin";
+        return "deleted";
     }
 
-    @GetMapping(path = "user")
-    public String userPage(Authentication authentication, Model model) {
-        model.addAttribute("user", userService.loadUserByUsername(authentication.getName()));
+    @GetMapping(path = "user/getCurrUser")
+    public User getCurrUser(Authentication authentication) {
+        return userService.getUserByName(authentication.getName());
+    }
 
-        return "user";
+    @GetMapping(path = "admin/getOneUser/{id}")
+    public User editUserPage(@PathVariable("id") Long id) {
+        return userService.findUserById(id);
+    }
+
+    @GetMapping(path = "user/page")
+    public ModelAndView getUserPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("parts/user_page");
+        return modelAndView;
+    }
+
+    @GetMapping(path = "admin/page")
+    public ModelAndView getAdminPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("parts/admin_page");
+        return modelAndView;
     }
 }

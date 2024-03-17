@@ -74,6 +74,7 @@ public class UserService implements UserDetailsService {
             }
         }
 
+        user.setPassword(previousUser.getPassword());
         userRepository.save(user);
     }
 
@@ -111,5 +112,9 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findFirstByName(username).get();
+    }
+
+    public User getUserByName(String name) {
+        return userRepository.findFirstByName(name).get();
     }
 }

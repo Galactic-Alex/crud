@@ -18,8 +18,8 @@ public class UserConfig {
         return args -> {
             User user1 = new User("Alex", "alex@gmail.com", 24, "123");
             user1.setRoles(Set.of(new UserRole("ROLE_USER"), new UserRole("ROLE_ADMIN")));
-            User user2 = new User("Tolya", "tolya@professional.com", 24, "123");
-            user2.setRoles(Set.of(new UserRole("ROLE_USER")));
+            User user2 = new User("Tolya", "tolya@professional.com", 25, "123");
+            user2.setRoles(Set.of(new UserRole("ROLE_USER"), new UserRole("ROLE_ADMIN")));
             User user3 = new User("Someone", "someone@example.com", 65, "123");
             user3.setRoles(Set.of(new UserRole("ROLE_USER")));
             User user4 = new User("Oleg", "oleg@gmail.com", 45, "123");
