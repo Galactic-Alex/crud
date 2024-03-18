@@ -5,6 +5,8 @@ import com.alex.crud.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +47,8 @@ public class UserController {
     }
 
     @GetMapping(path = "user")
-    public User getCurrUser(Authentication authentication) {
-        return userService.getUserByName(authentication.getName());
+    public ResponseEntity<User> getCurrUser(Authentication authentication) {
+        return new ResponseEntity<>(userService.getUserByName(authentication.getName()), HttpStatus.OK);
     }
 
     @GetMapping(path = "user/page")
@@ -57,19 +59,19 @@ public class UserController {
     }
 
     @GetMapping("admin/users")
-    public List<User> getAllUsers() {
-        return userService.listAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        return new ResponseEntity<>(userService.listAllUsers(), HttpStatus.OK);
     }
 
     @DeleteMapping("admin/user/{id}")
-    public String deleteUser(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id, HttpServletResponse response) {
         userService.deleteById(id);
-        return "deleted";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(path = "admin/user/{id}")
-    public User editUserPage(@PathVariable("id") Long id) {
-        return userService.findUserById(id);
+    public ResponseEntity<User> editUserPage(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(userService.findUserById(id), HttpStatus.OK);
     }
 
     @GetMapping(path = "admin/page")
@@ -80,8 +82,8 @@ public class UserController {
     }
 
     @PostMapping(path = "admin/user")
-    public String registerNewUserPage(@ModelAttribute User user) {
+    public ResponseEntity<?> registerNewUserPage(@ModelAttribute User user) {
         userService.saveUser(user);
-        return "saved";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

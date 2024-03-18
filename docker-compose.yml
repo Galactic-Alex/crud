@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  app1:
+    image: 'galacticalex/com.alex.crud:latest'
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/composeDB
+      SPRING_DATASOURCE_USERNAME: ${PGUSERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${PGPASSWORD}
+    ports:
+      - "8080:8080"
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: ${PGUSERNAME}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      POSTGRES_DB: composeDB
+    expose:
+      - "5432"
