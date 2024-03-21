@@ -17,8 +17,6 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
   
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_APP_NAME }}
     - name: Build and push Docker images
       uses: docker/build-push-action@v5.3.0
       with:
