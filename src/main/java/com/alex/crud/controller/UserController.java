@@ -4,6 +4,8 @@ import com.alex.crud.model.User;
 import com.alex.crud.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.List;
 @RestController
 public class UserController {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final UserService userService;
 
     @Autowired
@@ -26,6 +29,7 @@ public class UserController {
 
     @GetMapping(path = "/")
     public ModelAndView indexPage() {
+        logger.info("Some viewed the index page");
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
         return modelAndView;
