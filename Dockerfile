@@ -5,6 +5,6 @@ COPY . /src
 RUN apk add --no-cache maven
 RUN mvn clean package -DskipTests
 
-COPY --from=build /src/target/*.jar app.jar
+COPY --from=build /target/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
 EXPOSE 8080
