@@ -58,4 +58,5 @@ jobs:
           script: |
 
             cd crud
-            docker-compose up --build -d
+            docker-compose pull
+            docker-compose up -d
