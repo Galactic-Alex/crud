@@ -15,7 +15,6 @@ spring:
     url: jdbc:postgresql://localhost:5433/firstDB
     username: ${PGUSERNAME}
     password: ${PGPASSWORD}
-
   #Server settings
 server:
   error:
