@@ -50,9 +50,9 @@ jobs:
     needs: [build_and_push, push_compose]
     steps:
       - name: Connect with SSH and Deploy
-        uses: appleboy/ssh-action@v0.1.8
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          host: overridetech.ru
+          host: ${{ secrets.HOST_IP }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}      
           script: |
