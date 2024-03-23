@@ -12,7 +12,7 @@ spring:
 
   #Datasource settings
   datasource:
-    url: jdbc:postgresql://localhost:5433/firstDB
+    url: jdbc:postgresql://postgres/firstDB
     username: ${PGUSERNAME}
     password: ${PGPASSWORD}
   #Server settings
