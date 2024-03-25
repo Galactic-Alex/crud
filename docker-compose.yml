@@ -27,8 +27,8 @@ services:
       POSTGRES_USER: ${PGUSERNAME}
       POSTGRES_PASSWORD: ${PGPASSWORD}
       POSTGRES_DB: composeDB
-    expose:
-      - "5432"
+    ports:
+      - "5432:5432"
     logging:
       driver: "json-file"
       options:

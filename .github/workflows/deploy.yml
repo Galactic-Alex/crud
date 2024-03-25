@@ -44,19 +44,19 @@ jobs:
         push: true
         tags: galacticalex/com.alex.crud
         
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs: [build_and_push, push_compose]
-    steps:
-      - name: Connect with SSH and Deploy
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.HOST_IP }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}      
-          script: |
-
-            cd crud
-            docker-compose pull
-            docker-compose up -d
+#  deploy:
+#    name: Deploy
+#    runs-on: ubuntu-latest
+#    needs: [build_and_push, push_compose]
+#    steps:
+#      - name: Connect with SSH and Deploy
+#        uses: appleboy/ssh-action@v1.0.3
+#        with:
+#          host: ${{ secrets.HOST_IP }}
+#          username: ${{ secrets.SSH_USER }}
+#          key: ${{ secrets.SSH_KEY }}
+#          script: |
+#
+#            cd crud
+#            docker-compose pull
+#            docker-compose up -d
