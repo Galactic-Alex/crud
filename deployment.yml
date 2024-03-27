@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crud-deployment
+spec:
+  selector:
+    matchLabels:
+      app: crud
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: crud
+    spec:
+      containers:
+        - image: galacticalex/com.alex.crud
+          name: crud
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PGUSERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: PGUSERNAME
+            - name: PGPASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: PGPASSWORD
+            - name: DB_IP
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: DB_IP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crud-service
+spec:
+  selector:
+    app: crud
+  ports:
+  - protocol: "TCP"
+    port: 8080 # The port that the service is running on in the cluster
+    targetPort: 8080 # The port exposed by the service
+    nodePort: 30008
+  type: LoadBalancer
