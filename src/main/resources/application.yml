@@ -17,5 +17,7 @@ spring:
     password: ${PGPASSWORD}
   #Server settings
 server:
+  servlet:
+    context-path: /alex-app
   error:
     include-message: always
