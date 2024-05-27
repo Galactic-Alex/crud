@@ -6,9 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class CrudApplication {
 
-    public static void main(String[] args) throws InterruptedException {
-//        Thread.sleep(Long.MAX_VALUE);
+    public static void main(String[] args) {
         SpringApplication.run(CrudApplication.class, args);
     }
-
 }

@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@RestController
+@RestController()
 public class UserController {
     private final UserService userService;
 
@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @DeleteMapping("admin/user/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id, HttpServletResponse response) {
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         userService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
